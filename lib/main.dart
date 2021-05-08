@@ -107,18 +107,21 @@ class _MathGameState extends State<MathGame> with TickerProviderStateMixin {
             MathGamePoints(
               points: _points,
             ),
-            SingleChildScrollView(
-              controller: _scrollController,
-              scrollDirection: Axis.horizontal,
-              physics: new NeverScrollableScrollPhysics(),
-              child: Row(
-                children: <Widget>[
-                  for (var question in _mathQuestions)
-                    Container(
-                      child: question,
-                      width: MediaQuery.of(context).size.width,
-                    ),
-                ],
+            Flexible(
+              flex: 1,
+              child: SingleChildScrollView(
+                controller: _scrollController,
+                scrollDirection: Axis.horizontal,
+                physics: new NeverScrollableScrollPhysics(),
+                child: Row(
+                  children: <Widget>[
+                    for (var question in _mathQuestions)
+                      Container(
+                        child: question,
+                        width: MediaQuery.of(context).size.width,
+                      ),
+                  ],
+                ),
               ),
             ),
             MathGameProgressBar(

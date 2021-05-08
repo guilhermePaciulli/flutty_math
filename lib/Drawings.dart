@@ -11,9 +11,9 @@ class CheckIconPainter extends CustomPainter {
       ..color = color
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 8;
+      ..strokeWidth = 18;
 
-    final double side = size.height;
+    final double side = size.width;
     Path path = Path();
     path.moveTo(0.25 * side, 0.5 * side);
     path.lineTo(0.45 * side, 0.7 * side);
@@ -34,11 +34,11 @@ class CrossIconPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final double margins = size.height * 0.3;
+    final double margins = size.width * 0.3;
     final paint = Paint()
       ..color = color
       ..strokeCap = StrokeCap.round
-      ..strokeWidth = 8;
+      ..strokeWidth = 18;
     canvas.drawLine(
       Offset(margins, margins),
       Offset(size.width - margins, size.height - margins),
