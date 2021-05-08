@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
 import 'MathQuestion.dart';
 import 'MathGamePoints.dart';
 import 'MathGameProgressBar.dart';
@@ -69,9 +68,7 @@ class _MathGameState extends State<MathGame> with TickerProviderStateMixin {
   void _didSelectValue(bool isCorrect) {
     setState(() {
       _progressBarAnimationController.reset();
-      if (isCorrect) {
-        _points += 1;
-      }
+      if (isCorrect) _points += 1;
       _currentQuestionIndex++;
       _scrollController
           .animateTo(
@@ -86,7 +83,7 @@ class _MathGameState extends State<MathGame> with TickerProviderStateMixin {
   @override
   void initState() {
     _initializeGame();
-    // _startProgressBar();
+    _startProgressBar();
     super.initState();
   }
 
