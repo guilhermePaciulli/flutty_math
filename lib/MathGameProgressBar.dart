@@ -24,9 +24,8 @@ class _MathGameProgressBarState extends State<MathGameProgressBar>
         borderRadius: BorderRadius.all(Radius.circular(8)),
         child: LinearProgressIndicator(
           value: widget.controller.value,
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-          backgroundColor: Colors.white,
-          semanticsLabel: 'Linear progress indicator',
+          valueColor: AlwaysStoppedAnimation<Color>(Color(0xffe01e37)),
+          backgroundColor: Colors.transparent,
           minHeight: 18,
         ),
       ),

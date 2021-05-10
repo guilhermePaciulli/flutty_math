@@ -106,7 +106,7 @@ class _AnsweredState extends StatelessWidget {
           child: ClipOval(
             child: Container(
               decoration: BoxDecoration(
-                color: isRightAnswer ? Colors.green : Colors.red,
+                color: isRightAnswer ? Color(0xff5dd39e) : Colors.red,
                 borderRadius: BorderRadius.all(Radius.circular(8)),
               ),
               child: CustomPaint(
@@ -165,7 +165,7 @@ class _QuestionHeading extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Color(0xffe01e37),
         borderRadius: BorderRadius.all(Radius.circular(8)),
       ),
       width: double.infinity,
@@ -174,7 +174,7 @@ class _QuestionHeading extends StatelessWidget {
         _question,
         textAlign: TextAlign.center,
         style: TextStyle(
-          color: Colors.black,
+          color: Colors.white,
           fontSize: 48,
           fontWeight: FontWeight.w500,
         ),

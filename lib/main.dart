@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'MathQuestion.dart';
 import 'MathGamePoints.dart';
 import 'MathGameProgressBar.dart';
+import 'SummaryWidget.dart';
 
 enum MathOperations { add, subtract }
 
@@ -19,7 +20,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: MathGame(),
+      home: SummaryWidget(
+        points: 15,
+      ),
     );
   }
 }
@@ -98,6 +101,7 @@ class _MathGameState extends State<MathGame> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        color: Color(0xff003049),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [

@@ -12,24 +12,20 @@ class MathGamePoints extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
-      child: Stack(
-        alignment: AlignmentDirectional.center,
-        children: [
-          Icon(
-            Icons.star,
-            color: Colors.yellow.shade600,
-            size: 102,
-          ),
-          Text(
-            _points.toString(),
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 32,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(color: Color(0xfffcbf49), width: 4),
+      ),
+      margin: EdgeInsets.all(24),
+      padding: EdgeInsets.all(4),
+      alignment: Alignment.center,
+      child: Text(
+        _points.toString(),
+        style: TextStyle(
+          color: Color(0xfffcbf49),
+          fontSize: 56,
+          fontWeight: FontWeight.w500,
+        ),
       ),
     );
   }
