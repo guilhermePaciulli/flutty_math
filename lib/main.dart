@@ -20,9 +20,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: SummaryWidget(
-        points: 15,
-      ),
+      home: MathGame(),
     );
   }
 }
@@ -33,7 +31,7 @@ class MathGame extends StatefulWidget {
 }
 
 class _MathGameState extends State<MathGame> with TickerProviderStateMixin {
-  List<Widget> _mathQuestions;
+  List<MathQuestion> _mathQuestions;
   AnimationController _progressBarAnimationController;
   int _points = 0;
   int _currentQuestionIndex = 0;
@@ -42,13 +40,12 @@ class _MathGameState extends State<MathGame> with TickerProviderStateMixin {
   void _initializeGame() {
     _currentQuestionIndex = 0;
     _points = 0;
-    _mathQuestions = [];
     _mathQuestions = List.generate(
-      9,
+      3,
       (index) => MathQuestion(
         key: ValueKey<int>(index),
         onSelectValue: (isCorrect) {
-          _didSelectValue(isCorrect);
+          _didEndQuestion(isCorrect);
         },
       ),
     );
@@ -65,14 +62,18 @@ class _MathGameState extends State<MathGame> with TickerProviderStateMixin {
   void _startProgressBar() {
     _progressBarAnimationController
         .forward()
-        .then((value) => _didSelectValue(false));
+        .then((value) => _didEndQuestion(false));
   }
 
-  void _didSelectValue(bool isCorrect) {
+  void _didEndQuestion(bool isCorrect) {
     setState(() {
       _progressBarAnimationController.reset();
       if (isCorrect) _points += 1;
       _currentQuestionIndex++;
+      if (_currentQuestionIndex + 1 >= _mathQuestions.length) {
+        _didEndGame();
+        return;
+      }
       _scrollController
           .animateTo(
             _currentQuestionIndex * MediaQuery.of(context).size.width,
@@ -80,6 +81,30 @@ class _MathGameState extends State<MathGame> with TickerProviderStateMixin {
             curve: Curves.easeInOutExpo,
           )
           .then((value) => _startProgressBar());
+    });
+  }
+
+  void _didEndGame() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SummaryView(
+          points: _points,
+        ),
+      ),
+    ).then((value) {
+      var action = value as SummaryActions;
+      switch (action) {
+        case SummaryActions.retry:
+          setState(() {
+            _initializeGame();
+          });
+          break;
+        case SummaryActions.home:
+          break;
+        default:
+          break;
+      }
     });
   }
 

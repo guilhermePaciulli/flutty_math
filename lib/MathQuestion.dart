@@ -11,6 +11,8 @@ class MathQuestion extends StatefulWidget {
   final Random random = new Random();
   final Function(bool isCorrect) onSelectValue;
 
+  void testing() {}
+
   @override
   _MathQuestionState createState() => _MathQuestionState();
 }
@@ -34,6 +36,12 @@ class _MathQuestionState extends State<MathQuestion> {
     });
   }
 
+  @override
+  void setState(fn) {
+    print("object");
+    super.setState(fn);
+  }
+
   void _generateQuestion() {
     _isRightAnswer = null;
     _answers = [];
@@ -44,7 +52,6 @@ class _MathQuestionState extends State<MathQuestion> {
       }
       _answers.add(number);
     }
-    assert(_answers.length == 9);
 
     int operandOne;
     int operandTwo;

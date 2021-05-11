@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'Leadeboard.dart';
 import 'SaveScore.dart';
 
-enum _SummaryActions { retry, save, home }
+enum SummaryActions { retry, save, home }
 
-class SummaryWidget extends StatefulWidget {
-  const SummaryWidget({Key key, this.points}) : super(key: key);
+class SummaryView extends StatefulWidget {
+  const SummaryView({Key key, this.points}) : super(key: key);
   @required
   final int points;
   @override
-  _SummaryWidgetState createState() => _SummaryWidgetState();
+  _SummaryViewState createState() => _SummaryViewState();
 }
 
-class _SummaryWidgetState extends State<SummaryWidget> {
+class _SummaryViewState extends State<SummaryView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +42,7 @@ class _SummaryWidgetState extends State<SummaryWidget> {
           _SummaryActionsWidget(
             onActionTap: (action) {
               switch (action) {
-                case _SummaryActions.save:
+                case SummaryActions.save:
                   showDialog(
                     context: context,
                     builder: (context) =>
@@ -51,11 +51,11 @@ class _SummaryWidgetState extends State<SummaryWidget> {
                     setState(() {});
                   });
                   break;
-                case _SummaryActions.retry:
-                  // TODO: Handle this case.
+                case SummaryActions.retry:
+                  Navigator.of(context).pop(action);
                   break;
-                case _SummaryActions.home:
-                  // TODO: Handle this case.
+                case SummaryActions.home:
+                  Navigator.of(context).pop(action);
                   break;
               }
             },
@@ -69,7 +69,7 @@ class _SummaryWidgetState extends State<SummaryWidget> {
 class _SummaryActionsWidget extends StatelessWidget {
   const _SummaryActionsWidget({Key key, this.onActionTap}) : super(key: key);
 
-  final Function(_SummaryActions) onActionTap;
+  final Function(SummaryActions) onActionTap;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -85,7 +85,7 @@ class _SummaryActionsWidget extends StatelessWidget {
               size: 48,
             ),
             onPressed: () {
-              onActionTap(_SummaryActions.retry);
+              onActionTap(SummaryActions.retry);
             },
           ),
           MaterialButton(
@@ -96,7 +96,7 @@ class _SummaryActionsWidget extends StatelessWidget {
               size: 48,
             ),
             onPressed: () {
-              onActionTap(_SummaryActions.save);
+              onActionTap(SummaryActions.save);
             },
           ),
           MaterialButton(
@@ -107,7 +107,7 @@ class _SummaryActionsWidget extends StatelessWidget {
               size: 48,
             ),
             onPressed: () {
-              onActionTap(_SummaryActions.home);
+              onActionTap(SummaryActions.home);
             },
           ),
         ],
