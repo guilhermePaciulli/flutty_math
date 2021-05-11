@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'MathQuestion.dart';
 import 'MathGamePoints.dart';
 import 'MathGameProgressBar.dart';
+import 'MathQuestion.dart';
 import 'SummaryWidget.dart';
 
 enum MathOperations { add, subtract }
@@ -11,7 +12,6 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     // debugPaintSizeEnabled = true;
@@ -31,7 +31,7 @@ class MathGame extends StatefulWidget {
 }
 
 class _MathGameState extends State<MathGame> with TickerProviderStateMixin {
-  List<MathQuestion> _mathQuestions;
+  List<MathQuestionViewModel> _mathQuestions;
   AnimationController _progressBarAnimationController;
   int _points = 0;
   int _currentQuestionIndex = 0;
@@ -42,27 +42,24 @@ class _MathGameState extends State<MathGame> with TickerProviderStateMixin {
     _points = 0;
     _mathQuestions = List.generate(
       3,
-      (index) => MathQuestion(
-        key: ValueKey<int>(index),
-        onSelectValue: (isCorrect) {
-          _didEndQuestion(isCorrect);
-        },
-      ),
+      (index) => MathQuestionViewModel(),
     );
-    _progressBarAnimationController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 5),
-    )..addListener(
-        () {
-          setState(() {});
-        },
-      );
   }
 
   void _startProgressBar() {
     _progressBarAnimationController
         .forward()
         .then((value) => _didEndQuestion(false));
+  }
+
+  void _didSelectAnswer(MathQuestionViewModel question, int answer) {
+    setState(() {
+      question.isRightAnswer = question.answer == answer;
+      Future.delayed(Duration(milliseconds: 500))
+        ..then((value) {
+          _didEndQuestion(question.isRightAnswer);
+        });
+    });
   }
 
   void _didEndQuestion(bool isCorrect) {
@@ -98,6 +95,7 @@ class _MathGameState extends State<MathGame> with TickerProviderStateMixin {
         case SummaryActions.retry:
           setState(() {
             _initializeGame();
+            _startProgressBar();
           });
           break;
         case SummaryActions.home:
@@ -110,6 +108,14 @@ class _MathGameState extends State<MathGame> with TickerProviderStateMixin {
 
   @override
   void initState() {
+    _progressBarAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 5),
+    )..addListener(
+        () {
+          setState(() {});
+        },
+      );
     _initializeGame();
     _startProgressBar();
     super.initState();
@@ -139,14 +145,10 @@ class _MathGameState extends State<MathGame> with TickerProviderStateMixin {
                 controller: _scrollController,
                 scrollDirection: Axis.horizontal,
                 physics: new NeverScrollableScrollPhysics(),
-                child: Row(
-                  children: <Widget>[
-                    for (var question in _mathQuestions)
-                      Container(
-                        child: question,
-                        width: MediaQuery.of(context).size.width,
-                      ),
-                  ],
+                child: _MathQuestion(
+                  mathQuestions: _mathQuestions,
+                  didSelectAnswer: (question, answer) =>
+                      _didSelectAnswer(question, answer),
                 ),
               ),
             ),
@@ -156,6 +158,45 @@ class _MathGameState extends State<MathGame> with TickerProviderStateMixin {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _MathQuestion extends StatelessWidget {
+  const _MathQuestion({
+    Key key,
+    @required List<MathQuestionViewModel> mathQuestions,
+    @required didSelectAnswer,
+  })  : _mathQuestions = mathQuestions,
+        _didSelectAnswer = didSelectAnswer,
+        super(key: key);
+
+  final List<MathQuestionViewModel> _mathQuestions;
+  final Function(MathQuestionViewModel, int) _didSelectAnswer;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        for (var question in _mathQuestions)
+          Container(
+            child: AnimatedSwitcher(
+              duration: Duration(milliseconds: 500),
+              child: question.isRightAnswer == null
+                  ? QuestionState(
+                      viewModel: question,
+                      didSelectAnswer: (answer) => _didSelectAnswer(
+                        question,
+                        answer,
+                      ),
+                    )
+                  : AnsweredState(
+                      isRightAnswer: question.isRightAnswer,
+                    ),
+            ),
+            width: MediaQuery.of(context).size.width,
+          ),
+      ],
     );
   }
 }

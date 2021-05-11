@@ -5,101 +5,49 @@ import 'Drawings.dart';
 
 enum MathOperations { add, subtract }
 
-class MathQuestion extends StatefulWidget {
-  MathQuestion({Key key, this.onSelectValue}) : super(key: key);
+class MathQuestionViewModel {
+  List<int> answers;
+  int answer;
+  String question;
+  bool isRightAnswer;
 
-  final Random random = new Random();
-  final Function(bool isCorrect) onSelectValue;
-
-  void testing() {}
-
-  @override
-  _MathQuestionState createState() => _MathQuestionState();
-}
-
-class _MathQuestionState extends State<MathQuestion> {
-  List<int> _answers;
-  int _answer;
-  bool _isRightAnswer;
-  Widget _mathQuestionState;
-
-  void _didSelectAnswer(int answer) {
-    setState(() {
-      _isRightAnswer = _answer == answer;
-      _mathQuestionState = _AnsweredState(
-        isRightAnswer: _isRightAnswer,
-      );
-      Future.delayed(Duration(milliseconds: 500))
-        ..then((value) {
-          widget.onSelectValue(_isRightAnswer);
-        });
-    });
-  }
-
-  @override
-  void setState(fn) {
-    print("object");
-    super.setState(fn);
-  }
-
-  void _generateQuestion() {
-    _isRightAnswer = null;
-    _answers = [];
-    for (var item in Iterable<int>.generate(9).toList()) {
-      var number = widget.random.nextInt(100);
-      while (_answers.contains(number)) {
-        number = widget.random.nextInt(100);
+  MathQuestionViewModel() {
+    Random random = new Random();
+    answers = [];
+    for (var _ in Iterable<int>.generate(9).toList()) {
+      var number = random.nextInt(100);
+      while (answers.contains(number)) {
+        number = random.nextInt(100);
       }
-      _answers.add(number);
+      answers.add(number);
     }
 
     int operandOne;
     int operandTwo;
     String sign;
 
-    _answer = _answers[widget.random.nextInt(8)];
-    final operation = MathOperations.values[widget.random.nextInt(1)];
-    operandTwo = widget.random.nextInt(_answer + 1);
+    answer = answers[random.nextInt(8)];
+    final operation = MathOperations.values[random.nextInt(1)];
+    operandTwo = random.nextInt(answer + 1);
     if (operandTwo != 0) {
       operandTwo -= 1;
     }
     switch (operation) {
       case MathOperations.add:
-        operandOne = _answer - operandTwo;
+        operandOne = answer - operandTwo;
         sign = "+";
         break;
       case MathOperations.subtract:
-        operandOne = _answer + operandTwo;
+        operandOne = answer + operandTwo;
         sign = "-";
         break;
     }
-    final _question = operandOne.toString() + sign + operandTwo.toString();
-    setState(() {
-      _mathQuestionState = _QuestionState(
-        answers: _answers,
-        didSelectAnswer: (value) => _didSelectAnswer(value),
-        question: _question,
-      );
-    });
-  }
-
-  @override
-  void initState() {
-    _generateQuestion();
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedSwitcher(
-      child: _mathQuestionState,
-      duration: Duration(milliseconds: 500),
-    );
+    question = operandOne.toString() + sign + operandTwo.toString();
   }
 }
 
-class _AnsweredState extends StatelessWidget {
-  const _AnsweredState({Key key, this.isRightAnswer}) : super(key: key);
+class AnsweredState extends StatelessWidget {
+  const AnsweredState({Key key, this.isRightAnswer}) : super(key: key);
 
   @required
   final bool isRightAnswer;
@@ -130,16 +78,11 @@ class _AnsweredState extends StatelessWidget {
   }
 }
 
-class _QuestionState extends StatelessWidget {
-  const _QuestionState(
-      {Key key, this.question, this.answers, this.didSelectAnswer})
+class QuestionState extends StatelessWidget {
+  const QuestionState({Key key, this.viewModel, this.didSelectAnswer})
       : super(key: key);
 
-  @required
-  final String question;
-  @required
-  final List<int> answers;
-  @required
+  final MathQuestionViewModel viewModel;
   final Function(int) didSelectAnswer;
   @override
   Widget build(BuildContext context) {
@@ -148,9 +91,9 @@ class _QuestionState extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _QuestionHeading(question: question),
+          _QuestionHeading(question: viewModel.question),
           _AnswersGrid(
-            answers: answers,
+            answers: viewModel.answers,
             didSelectValue: (ans) => didSelectAnswer(ans),
           )
         ],
