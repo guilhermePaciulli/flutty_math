@@ -55,7 +55,7 @@ class _SummaryViewState extends State<SummaryView> {
                   Navigator.of(context).pop(action);
                   break;
                 case SummaryActions.home:
-                  Navigator.of(context).pop(action);
+                  Navigator.of(context).popUntil((route) => route.isFirst);
                   break;
               }
             },

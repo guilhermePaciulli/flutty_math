@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'MathCardCell.dart';
-import 'Drawings.dart';
+import '../Commons/Drawings.dart';
 
 enum MathOperations { add, subtract }
 
