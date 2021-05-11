@@ -21,7 +21,7 @@ class UserScore {
 
   static void add(UserScore score) {
     _sharedScores.add(score);
-    _sharedScores.sort((a, b) => a.score.compareTo(b.score));
+    _sharedScores.sort((a, b) => b.score.compareTo(a.score));
   }
 }
 
