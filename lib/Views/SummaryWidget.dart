@@ -38,7 +38,16 @@ class _SummaryViewState extends State<SummaryView> {
               ),
             ),
           ),
-          Leaderboard(),
+          Text(
+            "Leaderboard",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Color(0xfffcbf49),
+              fontSize: 24,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          ShortLeaderboard(),
           _SummaryActionsWidget(
             onActionTap: (action) {
               switch (action) {
@@ -80,7 +89,7 @@ class _SummaryActionsWidget extends StatelessWidget {
           MaterialButton(
             color: Color(0xffe01e37),
             child: Icon(
-              Icons.replay_outlined,
+              Icons.replay,
               color: Color(0xfffcbf49),
               size: 48,
             ),

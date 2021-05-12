@@ -19,7 +19,7 @@ class _MathGameState extends State<MathGame> with TickerProviderStateMixin {
   void _initializeGame() {
     _currentQuestionIndex = 0;
     _points = 0;
-    _mathQuestions = List.generate(9, (index) => MathQuestionViewModel());
+    _mathQuestions = List.generate(11, (index) => MathQuestionViewModel());
   }
 
   void _startProgressBar() {
