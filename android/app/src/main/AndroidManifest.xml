@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.my_app">
+    package="com.example.flutty_math">
    <application
-        android:label="my_app"
+        android:label="flutty_math"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

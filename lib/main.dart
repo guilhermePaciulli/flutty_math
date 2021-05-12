@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'Views/MainMenu.dart';
 
-enum MathOperations { add, subtract }
-
 void main() {
   runApp(MyApp());
 }

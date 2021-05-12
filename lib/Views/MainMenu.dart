@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/MathGame/MathGame.dart';
+import '../MathGame/MathGame.dart';
 import 'Leadeboard.dart';
 
 class MainMenuView extends StatelessWidget {
