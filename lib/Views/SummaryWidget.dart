@@ -13,6 +13,8 @@ class SummaryView extends StatefulWidget {
 }
 
 class _SummaryViewState extends State<SummaryView> {
+  var shouldHideSaveButton = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,6 +51,7 @@ class _SummaryViewState extends State<SummaryView> {
           ),
           ShortLeaderboard(),
           _SummaryActionsWidget(
+            shouldHideSaveButton: shouldHideSaveButton,
             onActionTap: (action) {
               switch (action) {
                 case SummaryActions.save:
@@ -57,7 +60,9 @@ class _SummaryViewState extends State<SummaryView> {
                     builder: (context) =>
                         saveScoreDialog(context, widget.points),
                   ).then((value) {
-                    setState(() {});
+                    setState(() {
+                      shouldHideSaveButton = value;
+                    });
                   });
                   break;
                 case SummaryActions.retry:
@@ -76,8 +81,11 @@ class _SummaryViewState extends State<SummaryView> {
 }
 
 class _SummaryActionsWidget extends StatelessWidget {
-  const _SummaryActionsWidget({Key key, this.onActionTap}) : super(key: key);
+  const _SummaryActionsWidget(
+      {Key key, this.onActionTap, this.shouldHideSaveButton})
+      : super(key: key);
 
+  final shouldHideSaveButton;
   final Function(SummaryActions) onActionTap;
   @override
   Widget build(BuildContext context) {
@@ -97,17 +105,18 @@ class _SummaryActionsWidget extends StatelessWidget {
               onActionTap(SummaryActions.retry);
             },
           ),
-          MaterialButton(
-            color: Color(0xffe01e37),
-            child: Icon(
-              Icons.save,
-              color: Color(0xfffcbf49),
-              size: 48,
+          if (!shouldHideSaveButton)
+            MaterialButton(
+              color: Color(0xffe01e37),
+              child: Icon(
+                Icons.save,
+                color: Color(0xfffcbf49),
+                size: 48,
+              ),
+              onPressed: () {
+                onActionTap(SummaryActions.save);
+              },
             ),
-            onPressed: () {
-              onActionTap(SummaryActions.save);
-            },
-          ),
           MaterialButton(
             color: Color(0xffe01e37),
             child: Icon(

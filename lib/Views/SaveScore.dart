@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'Leadeboard.dart';
+import '../Commons/UserScoreProvider.dart';
 
 Dialog saveScoreDialog(BuildContext context, int score) {
   return Dialog(
@@ -29,13 +29,15 @@ class _SaveScoreState extends State<SaveScore> {
   }
 
   void didTapToSaveScore() {
-    UserScore.add(
+    if (inputedName.isEmpty) return;
+    UserScoreProvider.shared.add(
       UserScore(
         inputedName,
         widget.score,
       ),
-    );
-    Navigator.of(context).pop();
+    )..then((value) {
+        Navigator.of(context).pop(true);
+      });
   }
 
   @override
@@ -75,7 +77,7 @@ class _SaveScoreState extends State<SaveScore> {
                   size: 48,
                 ),
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  Navigator.of(context).pop(false);
                 },
               ),
               MaterialButton(
@@ -85,8 +87,7 @@ class _SaveScoreState extends State<SaveScore> {
                   color: Color(0xfffcbf49),
                   size: 48,
                 ),
-                onPressed:
-                    isSaveButtonEnabled ? null : () => didTapToSaveScore(),
+                onPressed: () => didTapToSaveScore(),
               ),
             ],
           ),

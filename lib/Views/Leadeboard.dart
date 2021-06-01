@@ -1,25 +1,5 @@
 import 'package:flutter/material.dart';
-
-class UserScore {
-  @required
-  final String name;
-  @required
-  final int score;
-  const UserScore(this.name, this.score);
-
-  static List<UserScore> _sharedScores = [];
-
-  static List<UserScore> shortSharedScores() {
-    return _sharedScores.length <= 3
-        ? _sharedScores
-        : _sharedScores.sublist(0, 3);
-  }
-
-  static void add(UserScore score) {
-    _sharedScores.add(score);
-    _sharedScores.sort((a, b) => b.score.compareTo(a.score));
-  }
-}
+import '../Commons/UserScoreProvider.dart';
 
 class LongLeaderboard extends StatelessWidget {
   @override
@@ -40,8 +20,17 @@ class LongLeaderboard extends StatelessWidget {
         ),
       ),
       body: Center(
-        child: _Leaderboard(
-          scores: UserScore._sharedScores,
+        child: FutureBuilder(
+          future: UserScoreProvider.shared.getScores(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return _Leaderboard(
+                scores: snapshot.data,
+              );
+            } else {
+              return CircularProgressIndicator();
+            }
+          },
         ),
       ),
     );
@@ -49,10 +38,23 @@ class LongLeaderboard extends StatelessWidget {
 }
 
 class ShortLeaderboard extends StatelessWidget {
+  List<UserScore> _shortScoreList(scores) {
+    return scores.length >= 3 ? scores.sublist(0, 3) : scores;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return _Leaderboard(
-      scores: UserScore.shortSharedScores(),
+    return FutureBuilder(
+      future: UserScoreProvider.shared.getScores(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return _Leaderboard(
+            scores: _shortScoreList(snapshot.data),
+          );
+        } else {
+          return CircularProgressIndicator();
+        }
+      },
     );
   }
 }
