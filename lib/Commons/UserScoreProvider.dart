@@ -15,6 +15,7 @@ class UserScoreProvider {
   String _separator = ",";
 
   List<UserScore> _stringToScores(rawScores) {
+    if (rawScores == null) return [];
     List<UserScore> storedScores = [];
     for (var rawScore in rawScores) {
       final split = rawScore.split(_separator);

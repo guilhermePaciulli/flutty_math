@@ -39,6 +39,7 @@ class LongLeaderboard extends StatelessWidget {
 
 class ShortLeaderboard extends StatelessWidget {
   List<UserScore> _shortScoreList(scores) {
+    if (scores == null) return [];
     return scores.length >= 3 ? scores.sublist(0, 3) : scores;
   }
 
