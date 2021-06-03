@@ -14,9 +14,9 @@ Create a simple math game where the user selects among other 8, the right answer
 
 ## Results
 
-<center>
+<p align="center">
     <img src="/record.gif" width="200">
-</center>
+</p>
 
 To each question user has 5 seconds to select the right answer, past this time the user is pushed to next view.
 
